@@ -8,7 +8,7 @@ public class SortingAlgorithms {
     }
 
     /**
-     * Algorithms that applies bubble sort to a given array of integers.
+     * Function that applies bubble sort to a given array of integers.
      * Bubble sort is worst case O(N^2) time complexity
      * @param arr The array to be sorted
      */
@@ -25,7 +25,25 @@ public class SortingAlgorithms {
         }
     }
 
-    
+    /**
+     * Function that applies the insertion sort algorithm to an inputted array.
+     * Insertion sort is worst case O(N^2) time complexity.
+     * @param arr The arrayto be sorted.
+     */
+    public static void insertionSort(int[] arr)
+    {
+        if(arr != null && arr.length > 1) {
+            for (int i = 1; i < arr.length; i++) {
+                for (int j = 0; j < i; j++) {
+                    if (arr[i] < arr[j]) {
+                        swap(arr, i, j);
+                    }
+                }
+            }
+        }
+    }
+
+
 
 
 
