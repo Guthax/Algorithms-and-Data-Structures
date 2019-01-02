@@ -1,5 +1,5 @@
-import java.util.Arrays;
-import java.util.PriorityQueue;
+import java.awt.event.HierarchyBoundsAdapter;
+import java.util.*;
 
 public class SortingAlgorithms {
 
@@ -141,48 +141,77 @@ public class SortingAlgorithms {
         }
     }
 
-    public static void quickSort(int[] arr, int low, int high)
-    {
-        if(low < high)
+    public static void quickSort(int[] arr, int low, int high) {
+        if(low >= high)
         {
-            int split = partition(arr, low, high);
-            quickSort(arr, low, split - 1);
-            quickSort(arr, split + 1, high);
+            return;
         }
-    }
-    public static int partition(int[] arr, int low, int high)
-    {
-        int pivotValue = arr[high]; //Pivot set to last element
-
         int left = low;
-        int right = high - 1;
-
-        boolean finished = false;
-        while (!finished)
+        int right = high-1;
+        int pivotValue = arr[high];
+        while (left <= right)
         {
-            while (left <= right && arr[left] <= pivotValue)
-            {
+            while(left <= right && arr[left] <= pivotValue)
                 left++;
-            }
-            while (right >= left && arr[right] >= pivotValue)
-            {
+            while(left <= right && arr[right] >= pivotValue)
                 right--;
-            }
 
-            if(right < left)
-            {
-                finished = true;
-            }
-            else
-            {
+            if(left <= right) {
                 swap(arr, left, right);
+                left++;
+                right++;
             }
         }
-
-        swap(arr, high, left);
-        return right;
+        swap(arr, left, high);
+        quickSort(arr, low, left-1);
+        quickSort(arr, left+1, high);
     }
 
+    public static void bucketSort(int[] arr)
+    {
+        if(arr != null && arr.length > 1) {
+            Queue<Integer>[] buckets = fillBuckets(arr);
+            int counter = 0;
+            for (Queue<Integer> bucket : buckets) {
+                boolean empty = true;
+                while (!bucket.isEmpty()) {
+                    arr[counter] = bucket.remove();
+
+                    empty = false;
+                    counter++;
+                }
+            }
+        }
+    }
+
+    public static Queue<Integer>[] fillBuckets(int[] arr)
+    {
+        if(arr == null)
+        {
+            return  null;
+        }
+        else {
+            int vmin = arr[0];
+            int vmax = arr[0];
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] < vmin) {
+                    vmin = arr[i];
+                }
+                if (arr[i] > vmax) {
+                    vmax = arr[i];
+                }
+            }
+            Queue<Integer>[] buckets = new Queue[(vmax - vmin) + 1];
+            for (int i = 0; i < ((vmax - vmin) + 1); i++) {
+                buckets[i] = new ArrayDeque<>();
+            }
+            for(int i = 0; i < arr.length; i++)
+            {
+                buckets[arr[i] - vmin].add(arr[i]);
+            }
+            return buckets;
+        }
+    }
 
     /**
      * Function that sorts an array of integers using a priority queue.
